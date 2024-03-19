@@ -1,15 +1,11 @@
 const express = require('express');
 const multer = require('multer'); // Import multer
-const router = new express.Router();
+const router = express.Router();
 const qrcode = require("qrcode");
 const whatsappclient = require("../services/WhatsappClient")
-
 // Configure multer
-let currentQR = null;
-
-whatsappclient.on("qr", (qr) => {
-  currentQR = qr; // Update current QR code
-});
+const upload = multer({ dest: 'uploads/' });
+const app = express();
 
 /**
  * @swagger
@@ -41,28 +37,6 @@ router.get('/qr', async (req, res) => {
 });
 /**
  * @swagger
- * /refresh:
- *   get:
- *     summary: Refresh QrCode of Whatsapp
- *     description: send refresh qr code to user.
- *     responses:
- *       200:
- *         description: Successful response
- *       404:
- *         description: Not found
- */
-router.get('/refresh', (req, res) => {
-  // Request a new QR code from the WhatsappClient
-  whatsappclient.requestNewQR();
-  res.send("New QR code requested");
-});
-
-const upload = multer({
-  dest: 'uploads/' // Set the destination folder for uploaded files
-});
-
-/**
- * @swagger
  * /message:
  *   get:
  *     summary: send message to number
@@ -74,9 +48,34 @@ const upload = multer({
  *         description: Not found
  */
 // Use upload middleware for handling file uploads
-router.post("/message", upload.single("file"), (req, res) => {
-  whatsappclient.sendMessage(req.body.phoneNumber, req.body.message);
-  res.send();
+router.post("/message", upload.single("file"), async (req, res) => {
+  const phoneNumber = req.body.phoneNumber;
+  const message = req.body.message;
+
+  // Check if phoneNumber and message are provided
+  if (!phoneNumber || !message) {
+    return res.status(400).json({ success: false, message: "Phone number and message are required." });
+  }
+
+  try {
+    // Send the message using whatsappclient with a timeout of 120 seconds
+    const sendMessagePromise = whatsappclient.sendMessage(phoneNumber, message);
+    const timeoutPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error("Message sending timed out."));
+      }, 120000); // 120 seconds timeout
+    });
+
+    // Wait for either the message to be sent or the timeout to occur
+    await Promise.race([sendMessagePromise, timeoutPromise]);
+
+    // If we reached here, the message was sent successfully within the timeout
+    res.status(200).json({ success: true, message: "Message sent successfully." });
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).json({ success: false, message: error.message || "Failed to send message." });
+  }
 });
 
-module.exports = router;
+module.exports =router;
+  
