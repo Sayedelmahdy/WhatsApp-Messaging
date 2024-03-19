@@ -7,8 +7,8 @@ whatsappclient.initialize();
 
 
 const app = express();
-const server = app.listen(8088, () => {
-    console.log(`Server is running on port ${8088}`);
+const server = app.listen(6379, () => {
+    console.log(`Server is running on port ${6379}`);
   });
 
 createWebSocketServer(server);
@@ -19,5 +19,5 @@ app.use(messageRouter);
 app.get('/', (req, res) => {
     res.redirect('/api-docs');
   });
-const PORT = process.env.PORT||8080; // Use the provided port or default to 3000
+const PORT = 8080; // Use the provided port or default to 3000
 app.listen(PORT, () => console.log(`Server is ready on port ${PORT}`));
