@@ -7,34 +7,7 @@ const whatsappclient = require("../services/WhatsappClient")
 const upload = multer({ dest: 'uploads/' });
 const app = express();
 
-/**
- * @swagger
- * /qr:
- *   get:
- *     summary: QrCode of Whatsapp
- *     description: send qr code to user.
- *     responses:
- *       200:
- *         description: Successful response
- *       404:
- *         description: Not found
- */
-router.get('/qr', async (req, res) => {
-  try {
-    if (currentQR) {
-      // Generate QR code as an image
-      const qrImage = await qrcode.toDataURL(currentQR, { errorCorrectionLevel: 'H' });
-      // Convert QR code image to base64
-      const base64Image = qrImage.split(';base64,').pop();
-      res.send(base64Image); // Send base64-encoded QR code image to user
-    } else {
-      res.status(404).send("QR code not available");
-    }
-  } catch (error) {
-    console.error("Error generating QR code:", error);
-    res.status(500).send("Error generating QR code");
-  }
-});
+
 /**
  * @swagger
  * /message:
