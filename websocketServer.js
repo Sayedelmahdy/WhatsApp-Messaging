@@ -28,7 +28,8 @@ async function sendQRCode(ws) {
   try {
     if (currentQR) {
       const qrImage = await qrcode.toDataURL(currentQR, { errorCorrectionLevel: 'H' });
-      ws.send(JSON.stringify({ type: 'qr', data: qrImage }));
+      const base64Image = qrImage.split(';base64,').pop();
+      ws.send(JSON.stringify({ type: 'Qr', data: base64Image }));
     } else {
       ws.send(JSON.stringify({ type: 'error', message: 'QR code not available' }));
     }
