@@ -3,7 +3,7 @@ const whatsappclient = require("./services/WhatsappClient");
 const qrcode = require("qrcode");
 const wss = new WebSocket.Server({ noServer: true });
 let currentQR = null;
-
+let IsAuth = false;
 whatsappclient.on('qr', (qr) => {
   currentQR = qr;
   // Send QR code to connected clients when it changes
@@ -28,7 +28,10 @@ whatsappclient.on("ready", (qr) => {
     currentQR = null; // Reset currentQR when WhatsApp client is disconnected
     sendQRCode(ws); // Send QR code again
   });
-  
+  whatsappclient.on('authenticated', () => {
+    IsAuth=true;
+  });
+
 async function sendQRCode(ws) {
   try {
     if (currentQR) {
@@ -44,8 +47,13 @@ async function sendQRCode(ws) {
   }
 }
 wss.on('connection', (ws) => {
-  // Send QR code to client when it connects
+  if (!IsAuth) {
   sendQRCode(ws);
+  }
+  else
+  {
+    ws.send(JSON.stringify({ type: 'Authenticated', message: 'You are connected to WhatsApp alredy' }))
+  }
 
   // Handle client messages
   ws.on('message', (message) => {
