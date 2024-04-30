@@ -29,6 +29,7 @@ Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/yourusername/whatsapp-messaging.git
 cd whatsapp-messaging
+npm i whatsapp-web.js@1.16.4-alpha.0
 npm install
 ```
 
