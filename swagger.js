@@ -5,9 +5,9 @@ const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Your API Documentation',
+            title: 'WhatsApp Message OTP',
             version: '1.0.0',
-            description: 'API documentation generated with Swagger',
+            description: '',
         },
     },
     apis: ['./routers/*.js'], // Path to the files containing the JSDoc comments
