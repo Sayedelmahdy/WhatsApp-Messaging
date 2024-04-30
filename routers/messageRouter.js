@@ -1,29 +1,39 @@
 const express = require('express');
-const multer = require('multer'); // Import multer
+const multer = require('multer'); // Import multer if needed for other routes
 const router = express.Router();
-const qrcode = require("qrcode");
-const whatsappclient = require("../services/WhatsappClient")
-// Configure multer
-const upload = multer({ dest: 'uploads/' });
+const qrcode = require("qrcode"); // Ensure this is used somewhere or remove it
+const whatsappclient = require("../services/WhatsappClient");
 const app = express();
-
 
 /**
  * @swagger
  * /message:
- *   get:
- *     summary: send message to number
- *     description: send message to number of users.
+ *   post:
+ *     summary: Send message to number
+ *     description: Send a message to a specified phone number.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 description: The phone number to send the message to.
+ *               message:
+ *                 type: string
+ *                 description: The message to send.
  *     responses:
  *       200:
- *         description: Successful response
- *       404:
- *         description: Not found
+ *         description: Message sent successfully.
+ *       400:
+ *         description: Phone number and message are required.
+ *       500:
+ *         description: Failed to send message.
  */
-// Use upload middleware for handling file uploads
-router.post("/message", upload.single("file"), async (req, res) => {
-  const phoneNumber = req.body.phoneNumber;
-  const message = req.body.message;
+router.post("/message", async (req, res) => {
+  const { phoneNumber, message } = req.body;
 
   // Check if phoneNumber and message are provided
   if (!phoneNumber || !message) {
@@ -50,6 +60,4 @@ router.post("/message", upload.single("file"), async (req, res) => {
   }
 });
 
-
-module.exports =router;
-  
+module.exports = router;

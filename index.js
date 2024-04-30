@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
     res.redirect('/api-docs');
 });
 
-const PORT = process.env.PORT||8080; // Use the provided port or default to 8080
+const PORT = process.env.PORT||8010; // Use the provided port or default to 8080
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
