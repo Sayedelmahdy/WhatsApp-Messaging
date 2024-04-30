@@ -25,8 +25,8 @@ whatsappclient.on("ready", (qr) => {
     });
   });
   whatsappclient.on("disconnected", () => {
-    currentQR = null; // Reset currentQR when WhatsApp client is disconnected
-    sendQRCode(ws); // Send QR code again
+    currentQR = null; 
+    sendQRCode(ws); 
   });
   whatsappclient.on('authenticated', () => {
     IsAuth=true;
@@ -55,15 +55,15 @@ wss.on('connection', (ws) => {
     ws.send(JSON.stringify({ type: 'Authenticated', message: 'You are connected to WhatsApp alredy' }))
   }
 
-  // Handle client messages
+  // on client messages
   ws.on('message', (message) => {
     if (message==="is authenticated ")
-      ws.send("i don't know hhhhhhhhh")
+      ws.send(JSON.stringify({ type: 'Authenticated', message: 'You are connected to WhatsApp alredy' }));
   });
 
-  // Handle client disconnection
+  // on client disconnection
   ws.on('close', () => {
-    // Clean up if needed
+    ws.send(JSON.stringify({ type: 'disconnected', message: 'User disconnected' }));
   });
 });
 function createWebSocketServer(server) {

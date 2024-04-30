@@ -49,9 +49,7 @@ router.post("/message", upload.single("file"), async (req, res) => {
     res.status(500).json({ success: false, message: error.message || "Failed to send message." });
   }
 });
-router.get('/test', (req, res) => {
-  res.send('Hello World!');
-});
+
 
 module.exports =router;
   
