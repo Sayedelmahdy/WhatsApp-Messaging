@@ -22,14 +22,14 @@ This Node.js project uses the `whatsapp-web.js` library to enable programmatic i
 ## Getting Started
 
 ### Prerequisites
-- Node.js and npm (Node package manager) installed on your system.
+- Node.js v20.12.2 at least and npm (Node package manager) installed on your system.
 
 ### Installation
 Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/yourusername/whatsapp-messaging.git
 cd whatsapp-messaging
-npm i whatsapp-web.js@1.16.4-alpha.0
+npm github:pedroslopez/whatsapp-web.js#webpack-exodus
 npm install
 ```
 
@@ -38,7 +38,7 @@ Start the server with:
 ```bash
 npm start
 ```
-This initiates the server on `localhost:8080`, setting up the WebSocket connection for QR code reception and the REST API for message sending.
+This initiates the server on `localhost:8010`, setting up the WebSocket connection for QR code reception and the REST API for message sending.
 
 ## API Endpoints
 
@@ -58,7 +58,7 @@ This initiates the server on `localhost:8080`, setting up the WebSocket connecti
 ### Connection Setup
 Connect to the WebSocket server via:
 ```url
-ws://localhost:8080
+ws://localhost:8010
 ```
 Upon connection, a QR code will be sent as base64 encoded data. Scan this QR code with the WhatsApp app to authenticate.
 
@@ -88,7 +88,7 @@ Upon connection, a QR code will be sent as base64 encoded data. Scan this QR cod
 ### Documentation
 - Maintain and update Swagger API documentation accessible via:
   ```url
-  http://localhost:8080/api-docs
+  http://localhost:8010/api-docs
   ```
 
 ## Deployment
